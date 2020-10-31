@@ -1,0 +1,105 @@
+{% extends 'Plant/base.html' %}
+{% block content %}
+<div class="total">
+	<div class="errorclass">
+	{% if  form.errors.username or form.errors.password1 or form.errors.password2 %}
+					<div class="alert alert-danger" id="watcher">
+							{{ form.errors.username }}
+							{{ form.errors.email }}
+							{{ form.errors.password1 }}
+							{{ form.errors.password2 }}
+					</div>	
+					{% endif %}
+	</div>
+
+
+	<div class="mainclass">
+	<div class="container" id="containerId">
+		<div class="myCard">
+			<div class="row">
+
+				<div class="col-md-6" id="leftWrapper">
+					<div class="myLeftCtn">
+						
+						<form class="myForm text-center" method="POST">
+							
+						<header> Create New Account </header>
+
+						{% csrf_token %}
+						<div class="form-group">
+							<i class="fas fa-user"></i>
+							<!-- <input class="myInput" type="text" placeholder="{{ form.username.id_for_label }}" id="username" required> -->
+							{{ form.username }}
+							<!-- </input> -->
+
+							<div class="invalid-feedback">Please fill out this field.
+							</div>
+
+						</div>
+
+						<div class="form-group">
+							<i class="fas fa-envelope"></i>
+							<!-- <input class="myInput" type="text" placeholder="{{ form.email.id_for_label }}" id="email" required></input> -->
+							{{ form.email }}
+							<div class="invalid-feedback">Please fill out this field.
+							</div>
+
+						</div>
+
+						<div class="form-group">
+							<i class="fas fa-lock"></i>
+							<!-- <input class="myInput" type="password" placeholder="{{ form.password1.id_for_label }}" id="password" required >
+							</input> -->
+							{{ form.password1 }}
+							<div class="invalid-feedback">Please fill out this field.
+							</div>
+
+						</div>
+
+						<div class="form-group">
+							<i class="fas fa-lock"></i>
+							<!-- <input class="myInput" type="password" placeholder="{{ form.password2.id_for_label }}" id="password" required>
+
+							</input> -->
+							{{ form.password2 }}
+
+							<div class="invalid-feedback">Please fill out this field.
+							</div>
+
+						</div>
+						<div class="form-group" style="display: float;">
+								<div style="width: 20%; display: inline-block; text-align: right;">{{form.is_manager}}</div> 
+								<div style="width: 40%; display: inline-block; text-align: left;">Seller?</div>
+						</div>
+
+						<p>already have an account??  <a href="{% url 'login' %}">Log In!!</a></p>
+
+						<input type="submit" class="btn btn-success" value="CREATE ACCOUNT" />
+
+
+						</form>
+
+					</div>
+
+				</div>
+
+				<div class="col-md-6" >
+
+					<div class="myRightCtn">
+						<div class="box"><header> Hello World! </header>
+
+						<p>
+							This is some text, you can replace it with any information you want. This is an ideal internship for me. This uses django...ohh wow..is it ?
+						</p>
+
+						<input type="button" class="btn btn-info" value="Learn More" />
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+{% endblock content %}

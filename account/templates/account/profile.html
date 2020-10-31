@@ -1,0 +1,84 @@
+{% extends 'Plant/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div style="display: inline-block; height: 100vh;">
+	<div class="profileclass">
+		<div class="profilecard1">
+
+			<div class="userdetailcard">
+				<img src="{{ user.profile_pic.url }}" />
+			</div>
+			<div class="userdetails">
+				<h1><a href="{% url 'manager-plants' user.username %}" style="text-decoration: none;"> {{ user.username }} </a></h1>
+				<h2> {{ user.email }}  </h2> 
+				{% if user.is_manager %}
+				<h1> Manager  </h1>
+				{% endif %}
+			</div>
+
+		</div>
+
+		<div class="profilecard2">
+			<form class="myForm text-center" method="POST" enctype="multipart/form-data">
+							
+						<header> Edit Your Profile </header>
+
+						{% csrf_token %}
+						<div class="form-group">
+							<i class="fas fa-user" style="font-size: 5vh; margin-right: 2vh;"></i>
+							{{ form.username }}
+
+
+						</div>
+
+						<div class="form-group">
+							<i class="fas fa-envelope" style="font-size: 5vh; margin-right: 2vh;"></i>
+							{{ form.email }}
+
+						</div>
+
+						<div class="form-group">
+							{{ form.profile_pic }}
+						</div>
+
+						<div class="form-group" style="height: 8vh">
+								<div style="width: 5%; display: inline-block; text-align: right; vertical-align: center; ">{{form.is_manager}}</div> 
+								<div style="width: 40%; display: inline-block; text-align: left; font-size: 3vh;">Seller?</div>
+						</div>
+
+						<div style="height: 5vh; width: 100%; text-align: right;">
+						{% if request.user.is_manager %}
+						<a class="btn btn-outline-danger" href="{% url 'plant-create' %}" style="height: 5vh; width: 10vw;"> Add Plants </a>
+						{% endif %}
+						<a class="btn btn-outline-secondary" href="{% url 'myorders' %}" style="height: 5vh; width: 10vw;"> My Orders </a>
+						<button type="submit" class="btn btn-outline-success" style="height: 5vh; width: 10vw;"> Update </button>
+						</div>
+
+
+						</form>
+
+		</div>
+
+	</div>
+	<div >
+		{% if messages %}
+			{% for message in messages %}
+				<div class="alert alert-success" style="height: 10vh; margin-top: 86vh; "><p> {{ message }}</p> </div>
+			{% endfor %}
+		{% endif %}
+	</div>
+</div>
+
+
+{% endblock content %}
+
+
+<!-- <img src="{{ user.profile_pic.url }}" >
+		<h1> {{ user.username }}</h1>
+		<p> {{ user.email }} </p>
+		<p> {{ user.username }} is 
+			{% if user.is_manager %}
+				not
+			{% endif %}
+			manager.
+		</p> -->

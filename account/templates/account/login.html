@@ -1,0 +1,83 @@
+{% extends 'Plant/base.html' %}
+{% block content %}
+<div class="total">
+
+<div class="errorclass">
+		{% if form.non_field_errors %}
+			<div class="alert alert-danger" id="watcher">
+
+   			 <ul class='form-errors'>
+			        {% for error in form.non_field_errors %}
+			            <li>{{ error }}</li>
+			        {% endfor %}
+    		</ul>
+			</div>
+        {% elif messages %}
+			<div class="alert alert-success" id="watcher">
+
+          {% for message in messages %}
+              <div class="alert alert-{{message.tags}}" style="border: none">{{ message }}</div>
+          {% endfor %}
+      </div>
+		{% endif %}
+</div>
+<div class="mainclass">
+	<div class="container" id="containerId">
+		<div class="myCard">
+			<div class="row">
+
+				<div class="col-md-6" id="leftWrapper">
+					<div class="myLeftCtn">
+						
+						<form class="myForm text-center" method="POST">
+							
+							<header> Log In Now </header>
+
+								{% csrf_token %}
+						
+								<div class="form-group" id="loginform">
+									<i class="fas fa-envelope"></i>
+									<!-- <input class="myInput" type="text" placeholder="{{ form.email.id_for_label }}" id="email" required></input> -->
+									{{ form.username }}
+									<div class="invalid-feedback">Please fill out this field.</div>
+
+								</div>
+
+								<div class="form-group" id="loginform">
+									<i class="fas fa-lock"></i>
+									<!-- <input class="myInput" type="password" placeholder="{{ form.password1.id_for_label }}" id="password" required >
+									</input> -->
+									{{ form.password }}
+									<div class="invalid-feedback">Please fill out this field.</div>
+
+								</div>
+								<p>Don't have an account??  <a href="{% url 'register' %}">Sign Up!!</a></p>
+								<input type="submit" class="btn btn-success" value="Log In" style="margin-top: 3vh; width: 5vw;" />
+								<p><small><a href="{% url 'password_reset' %}"> forgot password? </a></small></p>
+						</form>
+
+					</div>
+
+
+				</div>
+
+				<div class="col-md-6" >
+
+					<div class="myRightCtn">
+						<div class="box">
+							<header> Hello World! </header>
+							<p>
+								This is some text, you can replace it with any information you want. This is an ideal internship for me. This uses django...ohh wow..is it ?
+							</p>
+							<input type="button" class="btn btn-info" value="Learn More"  />
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+{% endblock content %}
