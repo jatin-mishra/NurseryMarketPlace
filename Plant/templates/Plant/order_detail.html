@@ -1,0 +1,20 @@
+{% extends 'Plant/base.html' %}
+{% block content %}
+	<div class="allplants">
+			<div class="cards">
+				<div class="image">
+					<img src="{{ object.plant.plant_image.url }}"/>
+				</div>
+				<div class="plantname">{{ object.plant.name }}</div>
+				<div class="details">
+					<span> Price : {{ object.price }} </span> <br>
+					<span> ordered quantity : {{ object.quantity }}</span><br>
+					<div class="managername"><a href="{% url 'manager-plants' object.seller %}" style="text-decoration: none; color: white;">{{ object.seller }}</a></div>
+
+					<button class="btn btn-danger" style="margin-bottom:3%; cursor: pointer;"><a style="text-decoration: none; color: white;" href="{% url 'order-delete' object.id %}"> Delete </a></button>
+					
+				</div>
+			</div>
+	</div>
+{% endblock content %}
+

@@ -1,0 +1,69 @@
+{% extends 'Plant/base.html' %}
+{% load cart %}
+{% block content %}
+		{% if presence %}
+
+	<div class="allplants">
+		{% for plant in plants %}
+			<div class="cards">
+				<div class="image">
+					<img src="{{ plant.plant_image.url }}"/>
+				</div>
+				<div class="plantname"><a href="{% url 'plant-detail' plant.id %}" style="text-decoration: none; color:white;">{{ plant.name }}</a></div>
+				<div class="details">
+					<span> Price : {{ plant.price }} </span> <br>
+					<span> Available quantity : {{ plant.q_avail }}</span><br>
+					<div class="managername"><a href="{% url 'manager-plants' plant.manager.username %}" style="text-decoration: none; color:white;">{{ plant.manager.username }}</a></div>
+
+					{% if plant|is_in_cart:request.session.cart %}
+						<div class="footer" style="margin-bottom: 2px;">
+							<form method="POST" action="/cart/" style="width:100%; border-bottom: black;border-top: black; padding: 0px;" class="btn btn-outline-success">
+								{% csrf_token %}
+								<input type="text" name='product' value="{{ plant.id }}" hidden	>
+								<input type="text" name='remove' value="True" hidden	>
+							<input type="submit" value="-" style="width:100%; border-bottom: black;" class="btn btn-outline-success">
+							</form>
+
+							
+							<div class="text-center col" style="width:100%;">{{plant|cart_count:request.session.cart}}</div>
+
+							<form method="POST" action="/cart/" style="width:100%; border-bottom: black;border-top: black; padding: 0px;" class="btn btn-outline-success">
+								{% csrf_token %}
+						<input type="text" name='product' value="{{ plant.id }}" hidden	>
+							<input type="submit" value="+" style="width:100%; margin: 0px; border-top: black;" class="btn btn-outline-success">
+							</form>
+						</div>
+					{% else %}
+						<form method="POST" action="/cart/" class="btn btn-warning" style="margin-bottom:3%; cursor: pointer;">
+						{% csrf_token %}
+						<input type="text" name='product' value="{{ plant.id }}" hidden	>
+						<input type="submit" class="btn btn-warning" style="cursor: pointer; width: 100%; border: red;" value="Add To cart" >
+						</form>
+					{% endif %}
+
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+	{% else %}
+		<div class="absence">
+			<div class="cartabsence">
+			<h1> Cart is Empty!! </h1>
+			<button class="btn btn-outline-danger"><a href="{% url 'plant-list' %}" style="text-decoration: none; color: black;">Shop Now</a></button>
+		</div>
+		</div>
+	{% endif %}
+{% endblock content %}
+
+
+		<!-- <article class="media content-section"> -->
+			<!-- <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}"> -->
+	  		<!-- <div class="media-body">
+	    		<div class="article-metadata">
+	      		<a class="mr-2" href="#">Manager : {{ plant.manager }}</a>
+	      		<small class="text-muted">{{ plant.date_posted|date:"F d, Y" }}</small>
+	    		</div>
+	    		<h2><a class="article-title" href="#">Name : {{ plant.name }}</a></h2>
+    			<p class="article-content">price : {{ plant.price }}, available quantity: {{ plant.q_avail }}</p>
+  			</div>
+		</article> -->

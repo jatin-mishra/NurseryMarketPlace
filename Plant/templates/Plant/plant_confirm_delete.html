@@ -1,0 +1,80 @@
+{% extends 'Plant/base.html' %}
+{% block content %}
+<div style="display: inline-block; height: 100vh;">
+	<div class="profileclass">
+		{% if user.is_manager %}
+		<div class="profilecard1">
+
+			<div class="userdetailcard">
+				<img src="{{ user.profile_pic.url }}" />
+			</div>
+			<div class="userdetails">
+				<h1> {{ user.username }} </h1>
+				<h2> {{ user.email }}  </h2>
+				{% if user.is_manager %}
+				<h1> Manager  </h1>
+				{% endif %}
+			</div>
+
+		</div>
+
+		<div class="profilecard2">
+			
+					<form method="POST">
+						{% csrf_token %}
+						<fieldset class="form-group">
+							<h1>Are you sure!! {{ object.name }} </h1>
+					<button class="btn btn-outline-danger" type="submit" > Delete </button>
+					<a class="btn btn-outline-secondary"  href="{% url 'plant-detail' object.id %}"> Cancel </a> 
+							
+						</fieldset>
+
+					</form>
+		</div>
+
+		{% else %}
+		<div class="profilecard1">
+
+			<div class="userdetailcard">
+				<img src="{{ user.profile_pic.url }}" />
+			</div>
+			<div class="userdetails">
+				<h1> {{ user.username }} </h1>
+				<h2> {{ user.email }}  </h2>
+				{% if user.is_manager %}
+				<h1> Manager  </h1>
+				{% endif %}
+			</div>
+
+		</div>
+
+		<div class="profilecard2">
+			<form class="myForm text-center" method="POST" enctype="multipart/form-data">		
+						<h1> Not a  Manager </h1>
+			</form>
+		</div>
+
+
+		{% endif %}
+
+	</div>
+	<div >
+		{% if messages %}
+			{% for message in messages %}
+				<div class="alert alert-success" style="height: 10vh; margin-top: 86vh; "><p> {{ message }}</p> </div>
+			{% endfor %}
+		{% endif %}
+	</div>
+</div>
+{% endblock content %}
+
+
+<!-- <img src="{{ user.profile_pic.url }}" >
+		<h1> {{ user.username }}</h1>
+		<p> {{ user.email }} </p>
+		<p> {{ user.username }} is 
+			{% if user.is_manager %}
+				not
+			{% endif %}
+			manager.
+		</p> -->

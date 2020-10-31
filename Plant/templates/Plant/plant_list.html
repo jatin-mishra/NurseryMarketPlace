@@ -1,0 +1,98 @@
+{% extends 'Plant/base.html' %}
+{% load cart %}
+{% block content %}
+	<div class="allplants">
+		{% for plant in plants %}
+			<div class="cards" id="{{ plant.id }}">
+				<div class="image">
+					<img src="{{ plant.plant_image.url }}"/>
+				</div>
+				<div class="plantname"><a href="{% url 'plant-detail' plant.id %}" style="text-decoration: none; color:white;">{{ plant.name }}</a></div>
+				<div class="details">
+					<span> Price : {{ plant.price }} </span> <br>
+					<span> Available quantity : {{ plant.q_avail }}</span><br>
+					<div class="managername"><a href="{% url 'manager-plants' plant.manager.username %}" style="text-decoration: none; color:white;">{{ plant.manager.username }}</a></div>
+
+					{% if plant|is_in_cart:request.session.cart %}
+						<div class="footer" style="margin-bottom: 2px;">
+							<form method="POST" action="/plants/#{{ plant.id }}" style="width:100%; border-bottom: black;border-top: black; padding: 0px;" class="btn btn-outline-success">
+								{% csrf_token %}
+								<input type="text" name='product' value="{{ plant.id }}" hidden	>
+								<input type="text" name='remove' value="True" hidden	>
+							<input type="submit" value="-" style="width:100%; border-bottom: black;" class="btn btn-outline-success">
+							</form>
+
+							
+							<div class="text-center col" style="width:100%;">{{plant|cart_count:request.session.cart}}</div>
+
+							<form method="POST" action="/plants/#{{ plant.id }}" style="width:100%; border-bottom: black;border-top: black; padding: 0px;" class="btn btn-outline-success">
+								{% csrf_token %}
+						<input type="text" name='product' value="{{ plant.id }}" hidden	>
+							<input type="submit" value="+" style="width:100%; margin: 0px; border-top: black;" class="btn btn-outline-success">
+							</form>
+						</div>
+					{% else %}
+						<form method="POST" action="/plants/#{{ plant.id }}" class="btn btn-warning" style="margin-bottom:3%; cursor: pointer;">
+						{% csrf_token %}
+						<input type="text" name='product' value="{{ plant.id }}" hidden	>
+						<input type="submit" class="btn btn-warning" style="cursor: pointer; width: 100%; border: red;" value="Add To cart" >
+						</form>
+					{% endif %}
+
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+	<div class="paginationclass">
+		{% if is_paginated %}
+
+			<div class="paginationcontent">
+			{% if page_obj.has_previous %}
+				<div class="buttonwrapper">
+				<a style="text-decoration: none; color: black;"  href="?page=1">First</a>
+			</div>
+			<div class="buttonwrapper">
+				<a style="text-decoration: none; color: black;" href="?page={{ page_obj.previous_page_number }}" >Previous </a>
+			</div>
+			{% endif %}
+
+			{% for num in page_obj.paginator.page_range %}
+				{% if page_obj.number == num %}
+				<div class="buttonwrapper">
+					<a href="?page={{ num }}" style="text-decoration: none; color: black;">{{ num }}</a>
+				</div>
+
+				{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+				<div class="buttonwrapper">
+					<a style="text-decoration: none; color: black;" href="?page={{ num }}" >{{ num }}</a>
+				</div>
+				{% endif %}
+			{% endfor %}
+
+
+			{% if page_obj.has_next %}
+			<div class="buttonwrapper">
+				<a style="text-decoration: none; color: black;" href="?page={{ page_obj.next_page_number }}" >Next </a>
+			</div>
+			<div class="buttonwrapper">
+				<a style="text-decoration: none; color: black;"  href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+			</div>
+			{% endif %}
+			</div>
+
+		{% endif %}
+	</div>
+{% endblock content %}
+
+
+		<!-- <article class="media content-section"> -->
+			<!-- <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}"> -->
+	  		<!-- <div class="media-body">
+	    		<div class="article-metadata">
+	      		<a class="mr-2" href="#">Manager : {{ plant.manager }}</a>
+	      		<small class="text-muted">{{ plant.date_posted|date:"F d, Y" }}</small>
+	    		</div>
+	    		<h2><a class="article-title" href="#">Name : {{ plant.name }}</a></h2>
+    			<p class="article-content">price : {{ plant.price }}, available quantity: {{ plant.q_avail }}</p>
+  			</div>
+		</article> -->

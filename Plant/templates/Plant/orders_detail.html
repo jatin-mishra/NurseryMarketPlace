@@ -1,0 +1,24 @@
+{% extends 'Plant/base.html' %}
+{% block content %}
+	<div class="allplants">
+			<div class="cards">
+				<div class="image">
+					<img src="{{ object.plant.plant_image.url }}"/>
+				</div>
+				<div class="plantname">{{ object.plant.name }}</div>
+				<div class="details">
+					<span> Price : {{ object.price }} </span> <br>
+					<span> ordered quantity : {{ object.quantity }}</span><br>
+					<div class="managername"><a href="{% url 'manager-plants' object.seller %}" style="text-decoration: none; color: white;">{{ object.seller }}</a></div>
+
+					{% if not object.status %}
+					<form method="POST" action="/myorders/{{ object.id }}/" class="btn btn-danger" style="margin-bottom:3%; cursor: pointer;">
+						{% csrf_token %}
+					<input name="delete" type="submit" class="btn btn-danger" style="margin-bottom:3%; cursor: pointer;" value="Delete" />
+					</form>
+					{% endif %}
+				</div>
+			</div>
+	</div>
+{% endblock content %}
+

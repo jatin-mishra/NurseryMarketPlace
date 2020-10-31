@@ -1,0 +1,88 @@
+{% extends 'Plant/base.html' %}
+{% load cart %}
+{% block content %}
+	<div class="allplants">
+		{% if present != 0 %}
+		{% for order in orders %}
+			<div class="cards" id="{{ order.plant.id }}">
+				<div class="image">
+					<img src="{{ order.plant.plant_image.url }}"/>
+				</div>
+				<div class="plantname"><a href="{% url 'order-detail' order.id %}" style="text-decoration: none; color:white;">{{ order.plant.name }}</a></div>
+				<div class="details">
+					<span> Price : {{ order.plant.price }} </span> <br>
+					<span> Ordered quantity : {{ order.quantity }}</span><br>
+					<div class="managername"><a href="{% url 'manager-plants' order.seller %}" style="text-decoration: none; color:white;">{{ order.seller }}</a></div>
+
+				
+					{% if order.status %}
+					<button class="btn btn-warning" style="cursor: pointer; width: 100%; border: red; margin-bottom: 2%;" ><a href="#" style="text-decoration: none; color: black;"> Delivered </a></button>
+					{% else %}
+					<button class="btn btn-warning" style="cursor: pointer; width: 100%; border: red; margin-bottom: 2%;" ><a href="#" style="text-decoration: none; color: black;"> Pending </a></button>
+					{% endif %}
+
+				</div>
+			</div>
+		{% endfor %}
+		{% else %}
+			<div class="absence">
+			<div class="cartabsence">
+			<h1> No order Placed Yet!!! </h1>
+			<button class="btn btn-outline-danger"><a href="{% url 'plant-list' %}" style="text-decoration: none; color: black;">Shop Now</a></button>
+		</div>
+		</div>
+	{% endif %}
+	</div>
+	<div class="paginationclass">
+		{% if is_paginated %}
+
+			<div class="paginationcontent">
+			{% if page_obj.has_previous %}
+				<div class="buttonwrapper">
+				<a style="text-decoration: none; color: black;"  href="?page=1">First</a>
+			</div>
+			<div class="buttonwrapper">
+				<a style="text-decoration: none; color: black;" href="?page={{ page_obj.previous_page_number }}" >Previous </a>
+			</div>
+			{% endif %}
+
+			{% for num in page_obj.paginator.page_range %}
+				{% if page_obj.number == num %}
+				<div class="buttonwrapper">
+					<a href="?page={{ num }}" style="text-decoration: none; color: black;">{{ num }}</a>
+				</div>
+
+				{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+				<div class="buttonwrapper">
+					<a style="text-decoration: none; color: black;" href="?page={{ num }}" >{{ num }}</a>
+				</div>
+				{% endif %}
+			{% endfor %}
+
+
+			{% if page_obj.has_next %}
+			<div class="buttonwrapper">
+				<a style="text-decoration: none; color: black;" href="?page={{ page_obj.next_page_number }}" >Next </a>
+			</div>
+			<div class="buttonwrapper">
+				<a style="text-decoration: none; color: black;"  href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+			</div>
+			{% endif %}
+			</div>
+
+		{% endif %}
+	</div>
+{% endblock content %}
+
+
+		<!-- <article class="media content-section"> -->
+			<!-- <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}"> -->
+	  		<!-- <div class="media-body">
+	    		<div class="article-metadata">
+	      		<a class="mr-2" href="#">Manager : {{ plant.manager }}</a>
+	      		<small class="text-muted">{{ plant.date_posted|date:"F d, Y" }}</small>
+	    		</div>
+	    		<h2><a class="article-title" href="#">Name : {{ plant.name }}</a></h2>
+    			<p class="article-content">price : {{ plant.price }}, available quantity: {{ plant.q_avail }}</p>
+  			</div>
+		</article> -->

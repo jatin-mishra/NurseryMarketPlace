@@ -1,0 +1,49 @@
+{% extends 'Plant/base.html' %}
+{% load cart %}
+{% block content %}
+	<div class="allplants">
+			<div class="cards">
+				<div class="image">
+					<img src="{{ plant.plant_image.url }}"/>
+				</div>
+				<div class="plantname">{{ object.name }}</div>
+				<div class="details">
+					<span> Price : {{ object.price }} </span> <br>
+					<span> Available quantity : {{ object.q_avail }}</span><br>
+					<div class="managername"><a href="{% url 'manager-plants' object.manager.username %}" style="text-decoration: none; color: white;">{{ object.manager.username }}</a></div>
+
+					{% if object.manager.username != user.username %}
+						{% if object|is_in_cart:request.session.cart %}
+							<div class="footer" style="margin-bottom: 2px;">
+								<form method="POST" action="/plants/#{{ object.id }}" style="width:100%; border-bottom: black;border-top: black; padding: 0px;" class="btn btn-outline-success">
+									{% csrf_token %}
+									<input type="text" name='product' value="{{ object.id }}" hidden	>
+									<input type="text" name='remove' value="True" hidden	>
+								<input type="submit" value="-" style="width:100%; border-bottom: black;" class="btn btn-outline-success">
+								</form>
+
+								
+								<div class="text-center col" style="width:100%;">{{object|cart_count:request.session.cart}}</div>
+
+								<form method="POST" action="/plants/#{{ object.id }}" style="width:100%; border-bottom: black;border-top: black; padding: 0px;" class="btn btn-outline-success">
+									{% csrf_token %}
+							<input type="text" name='product' value="{{ object.id }}" hidden	>
+								<input type="submit" value="+" style="width:100%; margin: 0px; border-top: black;" class="btn btn-outline-success">
+								</form>
+							</div>
+						{% else %}
+							<form method="POST" action="/plants/#{{ object.id }}" class="btn btn-warning" style="margin-bottom:3%; cursor: pointer;">
+							{% csrf_token %}
+							<input type="text" name='product' value="{{ object.id }}" hidden	>
+							<input type="submit" class="btn btn-warning" style="cursor: pointer; width: 100%; border: red;" value="Add To cart" >
+							</form>
+						{% endif %}
+					{% else %}
+					<button class="btn btn-danger" style="margin-bottom:3%; cursor: pointer;"><a style="text-decoration: none; color: white;" href="{% url 'plant-delete' object.id %}"> Delete </a></button>
+					<button class="btn btn-warning" style="margin-bottom:3%; cursor: pointer;"><a style="text-decoration: none; color: white;" href="{% url 'plant-update' object.id %}"> Update </a> </button>
+					{% endif %}
+				</div>
+			</div>
+	</div>
+{% endblock content %}
+
